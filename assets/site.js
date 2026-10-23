@@ -135,7 +135,12 @@
       scope: scope.value.trim()
     };
 
-    fetch('http://localhost:8081/api/v1/inquiries', {
+    // Send data to backend (works seamlessly on live Vercel and local environments)
+    const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:8081/api/v1/inquiries'
+      : '/api/inquiries';
+
+    fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
