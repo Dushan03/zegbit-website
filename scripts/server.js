@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = 5500;
+const ROOT = path.resolve(__dirname, '..');
 const MIME = {
   '.html': 'text/html; charset=UTF-8',
   '.css': 'text/css',
@@ -20,14 +21,14 @@ const server = http.createServer((req, res) => {
   let reqPath = decodeURI(req.url.split('?')[0]);
   if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
   
-  const filePath = path.join(__dirname, reqPath);
+  const filePath = path.join(ROOT, reqPath);
   const ext = path.extname(filePath).toLowerCase();
   const contentType = MIME[ext] || 'application/octet-stream';
 
   fs.readFile(filePath, (err, content) => {
     if (err) {
       if (err.code === 'ENOENT') {
-        const notFound = path.join(__dirname, '404.html');
+        const notFound = path.join(ROOT, '404.html');
         fs.readFile(notFound, (e, nf) => {
           res.writeHead(404, { 'Content-Type': 'text/html; charset=UTF-8' });
           res.end(nf || '404 Not Found');
